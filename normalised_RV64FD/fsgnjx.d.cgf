@@ -1,0 +1,1781 @@
+fsgnjx.d_b1:
+  config:
+  - check ISA:=regex(.*I.*D.*)
+  mnemonics:
+    fsgnjx.d: 0
+  rs1:
+    <<: &all_fregs
+      f0: 0
+      f1: 0
+      f2: 0
+      f3: 0
+      f4: 0
+      f5: 0
+      f6: 0
+      f7: 0
+      f8: 0
+      f9: 0
+      f10: 0
+      f11: 0
+      f12: 0
+      f13: 0
+      f14: 0
+      f15: 0
+      f16: 0
+      f17: 0
+      f18: 0
+      f19: 0
+      f20: 0
+      f21: 0
+      f22: 0
+      f23: 0
+      f24: 0
+      f25: 0
+      f26: 0
+      f27: 0
+      f28: 0
+      f29: 0
+      f30: 0
+      f31: 0
+
+  rs2:
+    <<: *all_fregs
+  rd:
+    <<: *all_fregs
+  op_comb:
+    <<:
+      rs1 == rs2 != rd: 0
+      rs1 == rd != rs2: 0
+      rs2 == rd != rs1: 0
+      rs1 == rs2 == rd: 0
+      rs1 != rs2  and rs1 != rd and rs2 != rd: 0
+
+  val_comb:
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0  #  rs1_val==dzero(0x0000000000000000) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x0000000000000000) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dzero(0x8000000000000000) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x0000000000000001) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminsubnorm(0x8000000000000001) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x0000000000000002) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsubnorm(0x8000000000000002) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x000FFFFFFFFFFFFF) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x000 and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxsubnorm(0x800FFFFFFFFFFFFF) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x0010000000000000) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dminnorm(0x8010000000000000) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x0010000000000002) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x001 and fm1 == 0x0000000000002 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dnorm(0x8010000000000002) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0x7FEFFFFFFFFFFFFF) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7fe and fm1 == 0xfffffffffffff and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dmaxnorm(0xFFEFFFFFFFFFFFFF) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0x7FF0000000000000) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dinfinity(0xFFF0000000000000) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0x7FF8000000000000) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000000 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==ddefaultnan(0xFFF8000000000000) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0x7FF8000000000001) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x8000000000001 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dqnan(0xFFF8000000000001) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0x7FF0000000000001) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x7ff and fm1 == 0x0000000000001 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==dsnan(0xFFF0000000000001) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 0 and fe1 == 0x3ff and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0x3FF0000000000000) and rs2_val==done(0xBF80000000000000)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dzero(0x0000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dzero(0x8000000000000000)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dminsubnorm(0x0000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dminsubnorm(0x8000000000000001)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dsubnorm(0x0000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dsubnorm(0x8000000000000002)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dmaxsubnorm(0x000FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x000 and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dmaxsubnorm(0x800FFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dminnorm(0x0010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dminnorm(0x8010000000000000)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dnorm(0x0010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x001 and fm2 == 0x0000000000002 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dnorm(0x8010000000000002)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dmaxnorm(0x7FEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7fe and fm2 == 0xfffffffffffff and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dmaxnorm(0xFFEFFFFFFFFFFFFF)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dinfinity(0x7FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dinfinity(0xFFF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==ddefaultnan(0x7FF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==ddefaultnan(0xFFF8000000000000)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dqnan(0x7FF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x8000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dqnan(0xFFF8000000000001)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dsnan(0x7FF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x7ff and fm2 == 0x0000000000001 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==dsnan(0xFFF0000000000001)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 0 and fe2 ==
+      0x3ff and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==done(0x3FF0000000000000)
+    ? 'fs1 == 1 and fe1 == 0x3f8 and fm1 == 0x0000000000000 and fs2 == 1 and fe2 ==
+      0x3f8 and fm2 == 0x0000000000000 and  fcsr == 0  #nosat'
+    : 0 #  rs1_val==done(0xBF80000000000000) and rs2_val==done(0xBF80000000000000)

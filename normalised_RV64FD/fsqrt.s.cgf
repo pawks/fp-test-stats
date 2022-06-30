@@ -1,0 +1,495 @@
+fsqrt_b1:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fsqrt.s: 0
+  rs1:
+    <<: &all_fregs
+      f0: 0
+      f1: 0
+      f2: 0
+      f3: 0
+      f4: 0
+      f5: 0
+      f6: 0
+      f7: 0
+      f8: 0
+      f9: 0
+      f10: 0
+      f11: 0
+      f12: 0
+      f13: 0
+      f14: 0
+      f15: 0
+      f16: 0
+      f17: 0
+      f18: 0
+      f19: 0
+      f20: 0
+      f21: 0
+      f22: 0
+      f23: 0
+      f24: 0
+      f25: 0
+      f26: 0
+      f27: 0
+      f28: 0
+      f29: 0
+      f30: 0
+      f31: 0
+
+  rd:
+    <<: *all_fregs
+  op_comb:
+    <<: &ifmt_op_comb
+      rs1 == rd: 0
+      rs1 != rd: 0
+
+  val_comb:
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0  #  rs1_val==fzero(0x00000000)
+    'fs1 == 1 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fzero(0x80000000)
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000001 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fminsubnorm(0x00000001)
+    'fs1 == 1 and fe1 == 0x00 and fm1 == 0x000001 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fminsubnorm(0x80000001)
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000002 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x00000002)
+    'fs1 == 1 and fe1 == 0x00 and fm1 == 0x7ffffe and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x807FFFFE)
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fmaxsubnorm(0x007FFFFF)
+    'fs1 == 1 and fe1 == 0x00 and fm1 == 0x7fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fmaxsubnorm(0x807FFFFF)
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fminnorm(0x00800000)
+    'fs1 == 1 and fe1 == 0x01 and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fminnorm(0x80800000)
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x000001 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00800001)
+    'fs1 == 1 and fe1 == 0x01 and fm1 == 0x055555 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x80855555)
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fmaxnorm(0x7F7FFFFF)
+    'fs1 == 1 and fe1 == 0xfe and fm1 == 0x7fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fmaxnorm(0xFF7FFFFF)
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==finfinity(0x7F800000)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==finfinity(0xFF800000)
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x400000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fdefaultnan(0x7FC00000)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x400000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fdefaultnan(0xFFC00000)
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x400001 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fqnan(0x7FC00001)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x455555 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fqnan(0xFFC55555)
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x000001 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsnan(0x7F800001)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x2aaaaa and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsnan(0xFFAAAAAA)
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fone(0x3F800000)
+    'fs1 == 1 and fe1 == 0x7f and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fone(0xBF800000)
+fsqrt_b2:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fsqrt.s: 0
+  rs1:
+    <<: *all_fregs
+  rd:
+    <<: *all_fregs
+  op_comb:
+    <<: *ifmt_op_comb
+  val_comb:
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x0007f0 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0  #  rs1_val==fsubnorm(0x000007f0) | Result = fminnorm(0x80800000)^0x400000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000002 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f800002) | Result = fone(0xbf800000)^0x000001
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000004 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f800004) | Result = fone(0xbf800000)^0x000002
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000008 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f800008) | Result = fone(0xbf800000)^0x000004
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000010 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f800010) | Result = fone(0xbf800000)^0x000008
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000020 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f800020) | Result = fone(0xbf800000)^0x000010
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000040 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f800040) | Result = fone(0xbf800000)^0x000020
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000080 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f800080) | Result = fone(0xbf800000)^0x000040
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000100 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f800100) | Result = fone(0xbf800000)^0x000080
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000200 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f800200) | Result = fone(0xbf800000)^0x000100
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000400 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f800400) | Result = fone(0xbf800000)^0x000200
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000800 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f800800) | Result = fone(0xbf800000)^0x000400
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x001000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f801000) | Result = fone(0xbf800000)^0x000800
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x002002 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f802002) | Result = fone(0xbf800000)^0x001000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x004008 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f804008) | Result = fone(0xbf800000)^0x002000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x008020 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f808020) | Result = fone(0xbf800000)^0x004000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x010080 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f810080) | Result = fone(0xbf800000)^0x008000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x020200 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f820200) | Result = fone(0xbf800000)^0x010000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x040800 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f840800) | Result = fone(0xbf800000)^0x020000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x082000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f882000) | Result = fone(0xbf800000)^0x040000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x108000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f908000) | Result = fone(0xbf800000)^0x080000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x220000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3fa20000) | Result = fone(0xbf800000)^0x100000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x480000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3fc80000) | Result = fone(0xbf800000)^0x200000
+    'fs1 == 0 and fe1 == 0x80 and fm1 == 0x100000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x40100000) | Result = fone(0xbf800000)^0x400000
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==finfinity(0x7F800000) | Result = fmaxnorm(0xff7fffff)^0x400000
+fsqrt_b3:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fsqrt.s: 0
+  rs1:
+    <<: *all_fregs
+  rd:
+    <<: *all_fregs
+  op_comb:
+    <<: *ifmt_op_comb
+  val_comb:
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0  #  rs1_val==fzero(0x00000000) | Guard = 1 Sticky = 1 Sign = 0 LSB = 0
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x20 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fzero(0x00000000) | Guard = 1 Sticky = 1 Sign = 0 LSB = 0
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x40 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fzero(0x00000000) | Guard = 1 Sticky = 1 Sign = 0 LSB = 0
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x60 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fzero(0x00000000) | Guard = 1 Sticky = 1 Sign = 0 LSB = 0
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x80 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fzero(0x00000000) | Guard = 1 Sticky = 1 Sign = 0 LSB = 0
+    'fs1 == 0 and fe1 == 0xd5 and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x6a800000) | Guard = 1 Sticky = 1 Sign = 0 LSB = 0
+    'fs1 == 0 and fe1 == 0xd5 and fm1 == 0x000000 and  fcsr == 0x20 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x6a800000) | Guard = 1 Sticky = 1 Sign = 0 LSB = 0
+    'fs1 == 0 and fe1 == 0xd5 and fm1 == 0x000000 and  fcsr == 0x40 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x6a800000) | Guard = 1 Sticky = 1 Sign = 0 LSB = 0
+    'fs1 == 0 and fe1 == 0xd5 and fm1 == 0x000000 and  fcsr == 0x60 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x6a800000) | Guard = 1 Sticky = 1 Sign = 0 LSB = 0
+    'fs1 == 0 and fe1 == 0xd5 and fm1 == 0x000000 and  fcsr == 0x80 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x6a800000) | Guard = 1 Sticky = 1 Sign = 0 LSB = 0
+    'fs1 == 0 and fe1 == 0x29 and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x14800000) | Guard = 1 Sticky = 1 Sign = 0 LSB = 0
+    'fs1 == 0 and fe1 == 0x29 and fm1 == 0x000000 and  fcsr == 0x20 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x14800000) | Guard = 1 Sticky = 1 Sign = 0 LSB = 0
+    'fs1 == 0 and fe1 == 0x29 and fm1 == 0x000000 and  fcsr == 0x40 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x14800000) | Guard = 1 Sticky = 1 Sign = 0 LSB = 0
+    'fs1 == 0 and fe1 == 0x29 and fm1 == 0x000000 and  fcsr == 0x60 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x14800000) | Guard = 1 Sticky = 1 Sign = 0 LSB = 0
+    'fs1 == 0 and fe1 == 0x29 and fm1 == 0x000000 and  fcsr == 0x80 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x14800000) | Guard = 1 Sticky = 1 Sign = 0 LSB = 0
+fsqrt_b4:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fsqrt.s: 0
+  rs1:
+    <<: *all_fregs
+  rd:
+    <<: *all_fregs
+  op_comb:
+    <<: *ifmt_op_comb
+  val_comb:
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0  #  rs1_val==fmaxnorm(0x7f7fffff) | Exponent = 130 Number = -ve
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fffff and  fcsr == 0x20 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fmaxnorm(0x7f7fffff) | Exponent = 130 Number = -ve
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fffff and  fcsr == 0x40 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fmaxnorm(0x7f7fffff) | Exponent = 130 Number = -ve
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fffff and  fcsr == 0x60 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fmaxnorm(0x7f7fffff) | Exponent = 130 Number = -ve
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fffff and  fcsr == 0x80 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fmaxnorm(0x7f7fffff) | Exponent = 130 Number = -ve
+fsqrt_b5:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fsqrt.s: 0
+  rs1:
+    <<: *all_fregs
+  rd:
+    <<: *all_fregs
+  op_comb:
+    <<: *ifmt_op_comb
+  val_comb:
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0  #  rs1_val==fzero(0x00000000) | Exponent = MinNorm.exp + 5
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x20 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fzero(0x00000000) | Exponent = MinNorm.exp + 5
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x40 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fzero(0x00000000) | Exponent = MinNorm.exp + 5
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x60 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fzero(0x00000000) | Exponent = MinNorm.exp + 5
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x80 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fzero(0x00000000) | Exponent = MinNorm.exp + 5
+fsqrt_b7:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fsqrt.s: 0
+  rs1:
+    <<: *all_fregs
+  rd:
+    <<: *all_fregs
+  op_comb:
+    <<: *ifmt_op_comb
+  val_comb:
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x60 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0  #  rs1_val==fzero(0x00000000) | Mask on extra bits ---> 010000000000000000000
+    'fs1 == 0 and fe1 == 0xd5 and fm1 == 0x000000 and  fcsr == 0x60 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x6a800000) | Mask on extra bits ---> 010000000000000000000
+    'fs1 == 0 and fe1 == 0x29 and fm1 == 0x000000 and  fcsr == 0x60 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x14800000) | Mask on extra bits ---> 010000000000000000000
+fsqrt_b8:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fsqrt.s: 0
+  rs1:
+    <<: *all_fregs
+  rd:
+    <<: *all_fregs
+  op_comb:
+    <<: *ifmt_op_comb
+  val_comb:
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0  #  rs1_val==fzero(0x00000000) | Guard = 1 Round = 1 Sticky = 1 --> Mask On Extra Bits: 111111111111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x20 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fzero(0x00000000) | Guard = 1 Round = 1 Sticky = 1 --> Mask On Extra Bits: 111111111111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x40 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fzero(0x00000000) | Guard = 1 Round = 1 Sticky = 1 --> Mask On Extra Bits: 111111111111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x60 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fzero(0x00000000) | Guard = 1 Round = 1 Sticky = 1 --> Mask On Extra Bits: 111111111111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x80 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fzero(0x00000000) | Guard = 1 Round = 1 Sticky = 1 --> Mask On Extra Bits: 111111111111111111111
+    'fs1 == 0 and fe1 == 0xd5 and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x6a800000) | Guard = 1 Round = 1 Sticky = 1 --> Mask On Extra Bits: 111111111111111111111
+    'fs1 == 0 and fe1 == 0xd5 and fm1 == 0x000000 and  fcsr == 0x20 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x6a800000) | Guard = 1 Round = 1 Sticky = 1 --> Mask On Extra Bits: 111111111111111111111
+    'fs1 == 0 and fe1 == 0xd5 and fm1 == 0x000000 and  fcsr == 0x40 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x6a800000) | Guard = 1 Round = 1 Sticky = 1 --> Mask On Extra Bits: 111111111111111111111
+    'fs1 == 0 and fe1 == 0xd5 and fm1 == 0x000000 and  fcsr == 0x60 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x6a800000) | Guard = 1 Round = 1 Sticky = 1 --> Mask On Extra Bits: 111111111111111111111
+    'fs1 == 0 and fe1 == 0xd5 and fm1 == 0x000000 and  fcsr == 0x80 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x6a800000) | Guard = 1 Round = 1 Sticky = 1 --> Mask On Extra Bits: 111111111111111111111
+    'fs1 == 0 and fe1 == 0x29 and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x14800000) | Guard = 1 Round = 1 Sticky = 1 --> Mask On Extra Bits: 111111111111111111111
+    'fs1 == 0 and fe1 == 0x29 and fm1 == 0x000000 and  fcsr == 0x20 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x14800000) | Guard = 1 Round = 1 Sticky = 1 --> Mask On Extra Bits: 111111111111111111111
+    'fs1 == 0 and fe1 == 0x29 and fm1 == 0x000000 and  fcsr == 0x40 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x14800000) | Guard = 1 Round = 1 Sticky = 1 --> Mask On Extra Bits: 111111111111111111111
+    'fs1 == 0 and fe1 == 0x29 and fm1 == 0x000000 and  fcsr == 0x60 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x14800000) | Guard = 1 Round = 1 Sticky = 1 --> Mask On Extra Bits: 111111111111111111111
+    'fs1 == 0 and fe1 == 0x29 and fm1 == 0x000000 and  fcsr == 0x80 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x14800000) | Guard = 1 Round = 1 Sticky = 1 --> Mask On Extra Bits: 111111111111111111111
+fsqrt_b9:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fsqrt.s: 0
+  rs1:
+    <<: *all_fregs
+  rd:
+    <<: *all_fregs
+  op_comb:
+    <<: *ifmt_op_comb
+  val_comb:
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0  #  rs1_val==fzero(0x00000000) | Trailing zeroes ---> rs1_man = 00000000000000000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fmaxsubnorm(0x007fffff) | Trailing ones ---> rs1_man = 11111111111111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x400000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x00400000) | Trailing zeroes ---> rs1_man = 10000000000000000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x3fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x003fffff) | Trailing ones ---> rs1_man = 01111111111111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x600000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x00600000) | Trailing zeroes ---> rs1_man = 11000000000000000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x1fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x001fffff) | Trailing ones ---> rs1_man = 00111111111111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x700000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x00700000) | Trailing zeroes ---> rs1_man = 11100000000000000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x0fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x000fffff) | Trailing ones ---> rs1_man = 00011111111111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x780000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x00780000) | Trailing zeroes ---> rs1_man = 11110000000000000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x07ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x0007ffff) | Trailing ones ---> rs1_man = 00001111111111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7c0000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007c0000) | Trailing zeroes ---> rs1_man = 11111000000000000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x03ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x0003ffff) | Trailing ones ---> rs1_man = 00000111111111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7e0000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007e0000) | Trailing zeroes ---> rs1_man = 11111100000000000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x01ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x0001ffff) | Trailing ones ---> rs1_man = 00000011111111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7f0000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007f0000) | Trailing zeroes ---> rs1_man = 11111110000000000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x00ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x0000ffff) | Trailing ones ---> rs1_man = 00000001111111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7f8000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007f8000) | Trailing zeroes ---> rs1_man = 11111111000000000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x007fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x00007fff) | Trailing ones ---> rs1_man = 00000000111111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7fc000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007fc000) | Trailing zeroes ---> rs1_man = 11111111100000000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x003fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x00003fff) | Trailing ones ---> rs1_man = 00000000011111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7fe000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007fe000) | Trailing zeroes ---> rs1_man = 11111111110000000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x001fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x00001fff) | Trailing ones ---> rs1_man = 00000000001111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7ff000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007ff000) | Trailing zeroes ---> rs1_man = 11111111111000000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x00000fff) | Trailing ones ---> rs1_man = 00000000000111111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7ff800 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007ff800) | Trailing zeroes ---> rs1_man = 11111111111100000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x0007ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x000007ff) | Trailing ones ---> rs1_man = 00000000000011111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7ffc00 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007ffc00) | Trailing zeroes ---> rs1_man = 11111111111110000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x0003ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x000003ff) | Trailing ones ---> rs1_man = 00000000000001111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7ffe00 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007ffe00) | Trailing zeroes ---> rs1_man = 11111111111111000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x0001ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x000001ff) | Trailing ones ---> rs1_man = 00000000000000111111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7fff00 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007fff00) | Trailing zeroes ---> rs1_man = 11111111111111100000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x0000ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x000000ff) | Trailing ones ---> rs1_man = 00000000000000011111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7fff80 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007fff80) | Trailing zeroes ---> rs1_man = 11111111111111110000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x00007f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x0000007f) | Trailing ones ---> rs1_man = 00000000000000001111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7fffc0 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007fffc0) | Trailing zeroes ---> rs1_man = 11111111111111111000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x00003f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x0000003f) | Trailing ones ---> rs1_man = 00000000000000000111111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7fffe0 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007fffe0) | Trailing zeroes ---> rs1_man = 11111111111111111100000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x00001f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x0000001f) | Trailing ones ---> rs1_man = 00000000000000000011111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7ffff0 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007ffff0) | Trailing zeroes ---> rs1_man = 11111111111111111110000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x00000f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x0000000f) | Trailing ones ---> rs1_man = 00000000000000000001111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7ffff8 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007ffff8) | Trailing zeroes ---> rs1_man = 11111111111111111111000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000007 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x00000007) | Trailing ones ---> rs1_man = 00000000000000000000111
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7ffffc and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007ffffc) | Trailing zeroes ---> rs1_man = 11111111111111111111100
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000003 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x00000003) | Trailing ones ---> rs1_man = 00000000000000000000011
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7ffffe and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x007ffffe) | Trailing zeroes ---> rs1_man = 11111111111111111111110
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000001 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fminsubnorm(0x00000001) | Trailing ones ---> rs1_man = 00000000000000000000001
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fone(0x3f800000) | Trailing zeroes ---> rs1_man = 00000000000000000000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3fffffff) | Trailing ones ---> rs1_man = 11111111111111111111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x400000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3fc00000) | Leading ones ---> rs1_man = 10000000000000000000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x3fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3fbfffff) | Trailing ones ---> rs1_man = 01111111111111111111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x600000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3fe00000) | Leading ones ---> rs1_man = 11000000000000000000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x1fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f9fffff) | Trailing ones ---> rs1_man = 00111111111111111111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x700000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3ff00000) | Leading ones ---> rs1_man = 11100000000000000000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x0fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f8fffff) | Trailing ones ---> rs1_man = 00011111111111111111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x780000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3ff80000) | Leading ones ---> rs1_man = 11110000000000000000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x07ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f87ffff) | Trailing ones ---> rs1_man = 00001111111111111111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7c0000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3ffc0000) | Leading ones ---> rs1_man = 11111000000000000000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x03ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f83ffff) | Trailing ones ---> rs1_man = 00000111111111111111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7e0000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3ffe0000) | Leading ones ---> rs1_man = 11111100000000000000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x01ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f81ffff) | Trailing ones ---> rs1_man = 00000011111111111111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7f0000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3fff0000) | Leading ones ---> rs1_man = 11111110000000000000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x00ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f80ffff) | Trailing ones ---> rs1_man = 00000001111111111111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7f8000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3fff8000) | Leading ones ---> rs1_man = 11111111000000000000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x007fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f807fff) | Trailing ones ---> rs1_man = 00000000111111111111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7fc000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3fffc000) | Leading ones ---> rs1_man = 11111111100000000000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x003fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f803fff) | Trailing ones ---> rs1_man = 00000000011111111111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7fe000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3fffe000) | Leading ones ---> rs1_man = 11111111110000000000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x001fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f801fff) | Trailing ones ---> rs1_man = 00000000001111111111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7ff000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3ffff000) | Leading ones ---> rs1_man = 11111111111000000000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f800fff) | Trailing ones ---> rs1_man = 00000000000111111111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7ff800 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3ffff800) | Leading ones ---> rs1_man = 11111111111100000000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x0007ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f8007ff) | Trailing ones ---> rs1_man = 00000000000011111111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7ffc00 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3ffffc00) | Leading ones ---> rs1_man = 11111111111110000000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x0003ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f8003ff) | Trailing ones ---> rs1_man = 00000000000001111111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7ffe00 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3ffffe00) | Leading ones ---> rs1_man = 11111111111111000000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x0001ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f8001ff) | Trailing ones ---> rs1_man = 00000000000000111111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7fff00 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3fffff00) | Leading ones ---> rs1_man = 11111111111111100000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x0000ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f8000ff) | Trailing ones ---> rs1_man = 00000000000000011111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7fff80 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3fffff80) | Leading ones ---> rs1_man = 11111111111111110000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x00007f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f80007f) | Trailing ones ---> rs1_man = 00000000000000001111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7fffc0 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3fffffc0) | Leading ones ---> rs1_man = 11111111111111111000000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x00003f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f80003f) | Trailing ones ---> rs1_man = 00000000000000000111111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7fffe0 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3fffffe0) | Leading ones ---> rs1_man = 11111111111111111100000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x00001f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f80001f) | Trailing ones ---> rs1_man = 00000000000000000011111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7ffff0 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3ffffff0) | Leading ones ---> rs1_man = 11111111111111111110000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x00000f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f80000f) | Trailing ones ---> rs1_man = 00000000000000000001111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7ffff8 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3ffffff8) | Leading ones ---> rs1_man = 11111111111111111111000
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000007 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f800007) | Trailing ones ---> rs1_man = 00000000000000000000111
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7ffffc and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3ffffffc) | Leading ones ---> rs1_man = 11111111111111111111100
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000003 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f800003) | Trailing ones ---> rs1_man = 00000000000000000000011
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x7ffffe and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3ffffffe) | Leading ones ---> rs1_man = 11111111111111111111110
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000001 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3f800001) | Trailing ones ---> rs1_man = 00000000000000000000001
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fminnorm(0x00800000) | Trailing zeroes ---> rs1_man = 00000000000000000000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00ffffff) | Trailing ones ---> rs1_man = 11111111111111111111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x400000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00c00000) | Leading ones ---> rs1_man = 10000000000000000000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x3fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00bfffff) | Trailing ones ---> rs1_man = 01111111111111111111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x600000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00e00000) | Leading ones ---> rs1_man = 11000000000000000000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x1fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x009fffff) | Trailing ones ---> rs1_man = 00111111111111111111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x700000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00f00000) | Leading ones ---> rs1_man = 11100000000000000000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x0fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x008fffff) | Trailing ones ---> rs1_man = 00011111111111111111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x780000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00f80000) | Leading ones ---> rs1_man = 11110000000000000000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x07ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x0087ffff) | Trailing ones ---> rs1_man = 00001111111111111111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7c0000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00fc0000) | Leading ones ---> rs1_man = 11111000000000000000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x03ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x0083ffff) | Trailing ones ---> rs1_man = 00000111111111111111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7e0000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00fe0000) | Leading ones ---> rs1_man = 11111100000000000000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x01ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x0081ffff) | Trailing ones ---> rs1_man = 00000011111111111111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7f0000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00ff0000) | Leading ones ---> rs1_man = 11111110000000000000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x00ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x0080ffff) | Trailing ones ---> rs1_man = 00000001111111111111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7f8000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00ff8000) | Leading ones ---> rs1_man = 11111111000000000000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x007fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00807fff) | Trailing ones ---> rs1_man = 00000000111111111111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7fc000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00ffc000) | Leading ones ---> rs1_man = 11111111100000000000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x003fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00803fff) | Trailing ones ---> rs1_man = 00000000011111111111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7fe000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00ffe000) | Leading ones ---> rs1_man = 11111111110000000000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x001fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00801fff) | Trailing ones ---> rs1_man = 00000000001111111111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7ff000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00fff000) | Leading ones ---> rs1_man = 11111111111000000000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x000fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00800fff) | Trailing ones ---> rs1_man = 00000000000111111111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7ff800 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00fff800) | Leading ones ---> rs1_man = 11111111111100000000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x0007ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x008007ff) | Trailing ones ---> rs1_man = 00000000000011111111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7ffc00 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00fffc00) | Leading ones ---> rs1_man = 11111111111110000000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x0003ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x008003ff) | Trailing ones ---> rs1_man = 00000000000001111111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7ffe00 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00fffe00) | Leading ones ---> rs1_man = 11111111111111000000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x0001ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x008001ff) | Trailing ones ---> rs1_man = 00000000000000111111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7fff00 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00ffff00) | Leading ones ---> rs1_man = 11111111111111100000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x0000ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x008000ff) | Trailing ones ---> rs1_man = 00000000000000011111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7fff80 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00ffff80) | Leading ones ---> rs1_man = 11111111111111110000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x00007f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x0080007f) | Trailing ones ---> rs1_man = 00000000000000001111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7fffc0 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00ffffc0) | Leading ones ---> rs1_man = 11111111111111111000000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x00003f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x0080003f) | Trailing ones ---> rs1_man = 00000000000000000111111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7fffe0 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00ffffe0) | Leading ones ---> rs1_man = 11111111111111111100000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x00001f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x0080001f) | Trailing ones ---> rs1_man = 00000000000000000011111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7ffff0 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00fffff0) | Leading ones ---> rs1_man = 11111111111111111110000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x00000f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x0080000f) | Trailing ones ---> rs1_man = 00000000000000000001111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7ffff8 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00fffff8) | Leading ones ---> rs1_man = 11111111111111111111000
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x000007 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00800007) | Trailing ones ---> rs1_man = 00000000000000000000111
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7ffffc and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00fffffc) | Leading ones ---> rs1_man = 11111111111111111111100
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x000003 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00800003) | Trailing ones ---> rs1_man = 00000000000000000000011
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x7ffffe and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00fffffe) | Leading ones ---> rs1_man = 11111111111111111111110
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x000001 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00800001) | Trailing ones ---> rs1_man = 00000000000000000000001
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fmaxnorm(0x7f7fffff) | Trailing ones ---> rs1_man = 11111111111111111111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f000000) | Trailing zeroes ---> rs1_man = 00000000000000000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x3fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f3fffff) | Trailing ones ---> rs1_man = 01111111111111111111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x400000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f400000) | Trailing zeroes ---> rs1_man = 10000000000000000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x1fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f1fffff) | Trailing ones ---> rs1_man = 00111111111111111111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x600000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f600000) | Trailing zeroes ---> rs1_man = 11000000000000000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x0fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f0fffff) | Trailing ones ---> rs1_man = 00011111111111111111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x700000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f700000) | Trailing zeroes ---> rs1_man = 11100000000000000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x07ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f07ffff) | Trailing ones ---> rs1_man = 00001111111111111111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x780000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f780000) | Trailing zeroes ---> rs1_man = 11110000000000000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x03ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f03ffff) | Trailing ones ---> rs1_man = 00000111111111111111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7c0000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7c0000) | Trailing zeroes ---> rs1_man = 11111000000000000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x01ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f01ffff) | Trailing ones ---> rs1_man = 00000011111111111111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7e0000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7e0000) | Trailing zeroes ---> rs1_man = 11111100000000000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x00ffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f00ffff) | Trailing ones ---> rs1_man = 00000001111111111111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7f0000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7f0000) | Trailing zeroes ---> rs1_man = 11111110000000000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x007fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f007fff) | Trailing ones ---> rs1_man = 00000000111111111111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7f8000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7f8000) | Trailing zeroes ---> rs1_man = 11111111000000000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x003fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f003fff) | Trailing ones ---> rs1_man = 00000000011111111111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fc000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7fc000) | Trailing zeroes ---> rs1_man = 11111111100000000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x001fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f001fff) | Trailing ones ---> rs1_man = 00000000001111111111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fe000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7fe000) | Trailing zeroes ---> rs1_man = 11111111110000000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x000fff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f000fff) | Trailing ones ---> rs1_man = 00000000000111111111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7ff000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7ff000) | Trailing zeroes ---> rs1_man = 11111111111000000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x0007ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f0007ff) | Trailing ones ---> rs1_man = 00000000000011111111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7ff800 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7ff800) | Trailing zeroes ---> rs1_man = 11111111111100000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x0003ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f0003ff) | Trailing ones ---> rs1_man = 00000000000001111111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7ffc00 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7ffc00) | Trailing zeroes ---> rs1_man = 11111111111110000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x0001ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f0001ff) | Trailing ones ---> rs1_man = 00000000000000111111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7ffe00 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7ffe00) | Trailing zeroes ---> rs1_man = 11111111111111000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x0000ff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f0000ff) | Trailing ones ---> rs1_man = 00000000000000011111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fff00 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7fff00) | Trailing zeroes ---> rs1_man = 11111111111111100000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x00007f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f00007f) | Trailing ones ---> rs1_man = 00000000000000001111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fff80 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7fff80) | Trailing zeroes ---> rs1_man = 11111111111111110000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x00003f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f00003f) | Trailing ones ---> rs1_man = 00000000000000000111111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fffc0 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7fffc0) | Trailing zeroes ---> rs1_man = 11111111111111111000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x00001f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f00001f) | Trailing ones ---> rs1_man = 00000000000000000011111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fffe0 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7fffe0) | Trailing zeroes ---> rs1_man = 11111111111111111100000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x00000f and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f00000f) | Trailing ones ---> rs1_man = 00000000000000000001111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7ffff0 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7ffff0) | Trailing zeroes ---> rs1_man = 11111111111111111110000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x000007 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f000007) | Long sequence of zeroes ---> rs1_man = 00000000000000000000111
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7ffff8 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7ffff8) | Long sequence of ones ---> rs1_man = 11111111111111111111000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x000003 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f000003) | Long sequence of zeroes ---> rs1_man = 00000000000000000000011
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7ffffc and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7ffffc) | Long sequence of ones ---> rs1_man = 11111111111111111111100
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x000001 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f000001) | Long sequence of zeroes ---> rs1_man = 00000000000000000000001
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7ffffe and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7ffffe) | Long sequence of ones ---> rs1_man = 11111111111111111111110
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x36db6d and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f36db6d) | Checkerboard pattern ---> rs1_man = 01101101101101101101101
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x6db6db and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f6db6db) | Checkerboard pattern ---> rs1_man = 11011011011011011011011
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x199999 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f199999) | Checkerboard pattern ---> rs1_man = 00110011001100110011001
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x666666 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f666666) | Checkerboard pattern ---> rs1_man = 11001100110011001100110
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x3bbbbb and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f3bbbbb) | Checkerboard pattern ---> rs1_man = 01110111011101110111011
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x444444 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f444444) | Checkerboard pattern ---> rs1_man = 10001000100010001000100
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x249249 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f249249) | Checkerboard pattern ---> rs1_man = 01001001001001001001001
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x5b6db6 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f5b6db6) | Checkerboard pattern ---> rs1_man = 10110110110110110110110
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x333333 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f333333) | Checkerboard pattern ---> rs1_man = 01100110011001100110011
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x4ccccc and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f4ccccc) | Checkerboard pattern ---> rs1_man = 10011001100110011001100
+fsqrt_b20:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fsqrt.s: 0
+  rs1:
+    <<: *all_fregs
+  rd:
+    <<: *all_fregs
+  op_comb:
+    <<: *ifmt_op_comb
+  val_comb:
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fffff and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0  #  rs1_val==fmaxnorm(0x7f7fffff) | Intermediate result significand: 11011111111100000111000  Pattern: XXXXXXXXXXXXXXXXXXX1000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fzero(0x00000000)Intermediate result significand: 00000000000000000000000  Pattern: 00000000000000000000000
+    'fs1 == 0 and fe1 == 0x39 and fm1 == 0x480000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x1cc80000) | Intermediate result significand: 01000000000000000000000  Pattern: X1000000000000000000000
+    'fs1 == 0 and fe1 == 0xf9 and fm1 == 0x480000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7cc80000) | Intermediate result significand: 01000000000000000000000  Pattern: X1000000000000000000000
+    'fs1 == 0 and fe1 == 0xb7 and fm1 == 0x720000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x5bf20000) | Intermediate result significand: 01100000000000000000000  Pattern: XX100000000000000000000
+    'fs1 == 0 and fe1 == 0xc7 and fm1 == 0x720000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x63f20000) | Intermediate result significand: 01100000000000000000000  Pattern: XX100000000000000000000
+    'fs1 == 0 and fe1 == 0xf4 and fm1 == 0x610000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7a610000) | Intermediate result significand: 11100000000000000000000  Pattern: XX100000000000000000000
+    'fs1 == 0 and fe1 == 0x86 and fm1 == 0x704000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x43704000) | Intermediate result significand: 11110000000000000000000  Pattern: XXX10000000000000000000
+    'fs1 == 0 and fe1 == 0x97 and fm1 == 0x5c8000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x4bdc8000) | Intermediate result significand: 01010000000000000000000  Pattern: XXX10000000000000000000
+    'fs1 == 0 and fe1 == 0x82 and fm1 == 0x044000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x41044000) | Intermediate result significand: 01110000000000000000000  Pattern: XXX10000000000000000000
+    'fs1 == 0 and fe1 == 0x3b and fm1 == 0x108000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x1d908000) | Intermediate result significand: 00010000000000000000000  Pattern: XXX10000000000000000000
+    'fs1 == 0 and fe1 == 0x24 and fm1 == 0x689000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x12689000) | Intermediate result significand: 11101000000000000000000  Pattern: XXXX1000000000000000000
+    'fs1 == 0 and fe1 == 0x59 and fm1 == 0x7d2000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x2cfd2000) | Intermediate result significand: 01101000000000000000000  Pattern: XXXX1000000000000000000
+    'fs1 == 0 and fe1 == 0x8e and fm1 == 0x689000 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x47689000) | Intermediate result significand: 11101000000000000000000  Pattern: XXXX1000000000000000000
+    'fs1 == 0 and fe1 == 0x86 and fm1 == 0x130400 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x43130400) | Intermediate result significand: 10000100000000000000000  Pattern: XXXXX100000000000000000
+    'fs1 == 0 and fe1 == 0x88 and fm1 == 0x7c0400 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x447c0400) | Intermediate result significand: 11111100000000000000000  Pattern: XXXXX100000000000000000
+    'fs1 == 0 and fe1 == 0x66 and fm1 == 0x64c400 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3364c400) | Intermediate result significand: 11100100000000000000000  Pattern: XXXXX100000000000000000
+    'fs1 == 0 and fe1 == 0xf9 and fm1 == 0x7ff200 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7cfff200) | Intermediate result significand: 01101010000000000000000  Pattern: XXXXXX10000000000000000
+    'fs1 == 0 and fe1 == 0x39 and fm1 == 0x69d200 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x1ce9d200) | Intermediate result significand: 01011010000000000000000  Pattern: XXXXXX10000000000000000
+    'fs1 == 0 and fe1 == 0xef and fm1 == 0x7bb880 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x77fbb880) | Intermediate result significand: 01100111000000000000000  Pattern: XXXXXXX1000000000000000
+    'fs1 == 0 and fe1 == 0xd0 and fm1 == 0x095440 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x68095440) | Intermediate result significand: 01110111000000000000000  Pattern: XXXXXXX1000000000000000
+    'fs1 == 0 and fe1 == 0x7b and fm1 == 0x46c080 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3dc6c080) | Intermediate result significand: 00111111000000000000000  Pattern: XXXXXXX1000000000000000
+    'fs1 == 0 and fe1 == 0x80 and fm1 == 0x6d5a40 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x406d5a40) | Intermediate result significand: 11101101000000000000000  Pattern: XXXXXXX1000000000000000
+    'fs1 == 0 and fe1 == 0xd3 and fm1 == 0x6a7f20 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x69ea7f20) | Intermediate result significand: 01011010100000000000000  Pattern: XXXXXXXX100000000000000
+    'fs1 == 0 and fe1 == 0x34 and fm1 == 0x08f690 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x1a08f690) | Intermediate result significand: 01110110100000000000000  Pattern: XXXXXXXX100000000000000
+    'fs1 == 0 and fe1 == 0x6a and fm1 == 0x3e2364 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x353e2364) | Intermediate result significand: 10111001010000000000000  Pattern: XXXXXXXXX10000000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000160 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x00000160) | Intermediate result significand: 10101000110000000000000  Pattern: XXXXXXXXX10000000000000
+    'fs1 == 0 and fe1 == 0xbc and fm1 == 0x68cd04 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x5e68cd04) | Intermediate result significand: 11101000010000000000000  Pattern: XXXXXXXXX10000000000000
+    'fs1 == 0 and fe1 == 0x1b and fm1 == 0x5b5a62 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x0ddb5a62) | Intermediate result significand: 01001111001000000000000  Pattern: XXXXXXXXXX1000000000000
+    'fs1 == 0 and fe1 == 0xea and fm1 == 0x4f33d9 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x754f33d9) | Intermediate result significand: 11001100101000000000000  Pattern: XXXXXXXXXX1000000000000
+    'fs1 == 0 and fe1 == 0xa0 and fm1 == 0x10d851 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x5010d851) | Intermediate result significand: 10000001001000000000000  Pattern: XXXXXXXXXX1000000000000
+    'fs1 == 0 and fe1 == 0xce and fm1 == 0x1168e1 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x671168e1) | Intermediate result significand: 10000001111000000000000  Pattern: XXXXXXXXXX1000000000000
+    'fs1 == 0 and fe1 == 0x52 and fm1 == 0x216b44 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x29216b44) | Intermediate result significand: 10010110100100000000000  Pattern: XXXXXXXXXXX100000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000005 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x00000005) | Intermediate result significand: 10111011000100000000000  Pattern: XXXXXXXXXXX100000000000
+    'fs1 == 0 and fe1 == 0x3c and fm1 == 0x124e58 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x1e124e58) | Intermediate result significand: 10000011000100000000000  Pattern: XXXXXXXXXXX100000000000
+    'fs1 == 0 and fe1 == 0xc0 and fm1 == 0x3590aa and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x603590aa) | Intermediate result significand: 10101111001100000000000  Pattern: XXXXXXXXXXX100000000000
+    'fs1 == 0 and fe1 == 0xf3 and fm1 == 0x6653ed and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x79e653ed) | Intermediate result significand: 01010111011010000000000  Pattern: XXXXXXXXXXXX10000000000
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7f3827 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7f7f3827) | Intermediate result significand: 11111111001110000000000  Pattern: XXXXXXXXXXXX10000000000
+    'fs1 == 0 and fe1 == 0xa7 and fm1 == 0x0f78f8 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x538f78f8) | Intermediate result significand: 00001111000010000000000  Pattern: XXXXXXXXXXXX10000000000
+    'fs1 == 0 and fe1 == 0x0b and fm1 == 0x0cd684 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x058cd684) | Intermediate result significand: 00001100100010000000000  Pattern: XXXXXXXXXXXX10000000000
+    'fs1 == 0 and fe1 == 0xdd and fm1 == 0x4096e8 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x6ec096e8) | Intermediate result significand: 00111010000001000000000  Pattern: XXXXXXXXXXXXX1000000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x0cd173 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x000cd173) | Intermediate result significand: 01000100000011000000000  Pattern: XXXXXXXXXXXXX1000000000
+    'fs1 == 0 and fe1 == 0x59 and fm1 == 0x0fed85 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x2c8fed85) | Intermediate result significand: 00001111011101100000000  Pattern: XXXXXXXXXXXXXX100000000
+    'fs1 == 0 and fe1 == 0x39 and fm1 == 0x0ef3b1 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x1c8ef3b1) | Intermediate result significand: 00001110100010100000000  Pattern: XXXXXXXXXXXXXX100000000
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x2bf296 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x002bf296) | Intermediate result significand: 00101100000000100000000  Pattern: XXXXXXXXXXXXXX100000000
+    'fs1 == 0 and fe1 == 0xf5 and fm1 == 0x0aadc1 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7a8aadc1) | Intermediate result significand: 00001010011101110000000  Pattern: XXXXXXXXXXXXXXX10000000
+    'fs1 == 0 and fe1 == 0x3f and fm1 == 0x0577a2 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x1f8577a2) | Intermediate result significand: 00000101011010010000000  Pattern: XXXXXXXXXXXXXXX10000000
+    'fs1 == 0 and fe1 == 0xf9 and fm1 == 0x2b61ee and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x7cab61ee) | Intermediate result significand: 00101000001110010000000  Pattern: XXXXXXXXXXXXXXX10000000
+    'fs1 == 0 and fe1 == 0xe4 and fm1 == 0x1477dc and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x721477dc) | Intermediate result significand: 10000101111010011000000  Pattern: XXXXXXXXXXXXXXXX1000000
+    'fs1 == 0 and fe1 == 0xad and fm1 == 0x75bbd8 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x56f5bbd8) | Intermediate result significand: 01100010101101001000000  Pattern: XXXXXXXXXXXXXXXX1000000
+    'fs1 == 0 and fe1 == 0x31 and fm1 == 0x011313 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x18811313) | Intermediate result significand: 00000001000100101000000  Pattern: XXXXXXXXXXXXXXXX1000000
+    'fs1 == 0 and fe1 == 0xc2 and fm1 == 0x26f9c3 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x6126f9c3) | Intermediate result significand: 10011101100000000100000  Pattern: XXXXXXXXXXXXXXXXX100000
+    'fs1 == 0 and fe1 == 0x7b and fm1 == 0x64e1f0 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3de4e1f0) | Intermediate result significand: 01010110010100111100000  Pattern: XXXXXXXXXXXXXXXXX100000
+    'fs1 == 0 and fe1 == 0x65 and fm1 == 0x5b1e82 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x32db1e82) | Intermediate result significand: 01001110111100100100000  Pattern: XXXXXXXXXXXXXXXXX100000
+    'fs1 == 0 and fe1 == 0xb6 and fm1 == 0x479816 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x5b479816) | Intermediate result significand: 11000100000101101100000  Pattern: XXXXXXXXXXXXXXXXX100000
+    'fs1 == 0 and fe1 == 0x4e and fm1 == 0x454542 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x27454542) | Intermediate result significand: 11000001011100110010000  Pattern: XXXXXXXXXXXXXXXXXX10000
+    'fs1 == 0 and fe1 == 0xea and fm1 == 0x284ae6 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x75284ae6) | Intermediate result significand: 10011111001000001110000  Pattern: XXXXXXXXXXXXXXXXXX10000
+    'fs1 == 0 and fe1 == 0xd3 and fm1 == 0x190acf and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x69990acf) | Intermediate result significand: 00010111111011001010000  Pattern: XXXXXXXXXXXXXXXXXX10000
+    'fs1 == 0 and fe1 == 0x65 and fm1 == 0x064562 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x32864562) | Intermediate result significand: 00000110001100100011000  Pattern: XXXXXXXXXXXXXXXXXXX1000
+    'fs1 == 0 and fe1 == 0xac and fm1 == 0x13884e and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x5613884e) | Intermediate result significand: 10000100101011100111000  Pattern: XXXXXXXXXXXXXXXXXXX1000
+    'fs1 == 0 and fe1 == 0x79 and fm1 == 0x785c55 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x3cf85c55) | Intermediate result significand: 01100100100110001001000  Pattern: XXXXXXXXXXXXXXXXXXX1000
+    'fs1 == 0 and fe1 == 0x30 and fm1 == 0x75cb89 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x1875cb89) | Intermediate result significand: 11110101101100001111100  Pattern: XXXXXXXXXXXXXXXXXXXX100
+    'fs1 == 0 and fe1 == 0xb7 and fm1 == 0x4bce51 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x5bcbce51) | Intermediate result significand: 01000011000001111100100  Pattern: XXXXXXXXXXXXXXXXXXXX100
+    'fs1 == 0 and fe1 == 0xd0 and fm1 == 0x010151 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x68010151) | Intermediate result significand: 01101011011101010001100  Pattern: XXXXXXXXXXXXXXXXXXXX100
+    'fs1 == 0 and fe1 == 0x9e and fm1 == 0x38d874 and  fcsr == 0x0 and rm_val == 7  and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x4f38d874) | Intermediate result significand: 10110011000100001011100  Pattern: XXXXXXXXXXXXXXXXXXXX100

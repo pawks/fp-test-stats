@@ -1,0 +1,250 @@
+fmv.x.w_b1:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fmv.x.w: 0
+  rs1:
+    <<: &all_fregs
+      f0: 0
+      f1: 0
+      f2: 0
+      f3: 0
+      f4: 0
+      f5: 0
+      f6: 0
+      f7: 0
+      f8: 0
+      f9: 0
+      f10: 0
+      f11: 0
+      f12: 0
+      f13: 0
+      f14: 0
+      f15: 0
+      f16: 0
+      f17: 0
+      f18: 0
+      f19: 0
+      f20: 0
+      f21: 0
+      f22: 0
+      f23: 0
+      f24: 0
+      f25: 0
+      f26: 0
+      f27: 0
+      f28: 0
+      f29: 0
+      f30: 0
+      f31: 0
+
+  rd:
+    <<: &all_regs
+      x0: 0
+      x1: 0
+      x2: 0
+      x3: 0
+      x4: 0
+      x5: 0
+      x6: 0
+      x7: 0
+      x8: 0
+      x9: 0
+      x10: 0
+      x11: 0
+      x12: 0
+      x13: 0
+      x14: 0
+      x15: 0
+      x16: 0
+      x17: 0
+      x18: 0
+      x19: 0
+      x20: 0
+      x21: 0
+      x22: 0
+      x23: 0
+      x24: 0
+      x25: 0
+      x26: 0
+      x27: 0
+      x28: 0
+      x29: 0
+      x30: 0
+      x31: 0
+
+  val_comb:
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0  #nosat': 0  #  rs1_val==fzero(0x00000000)
+    'fs1 == 1 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==fzero(0x80000000)
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000001 and  fcsr == 0  #nosat': 0 #  rs1_val==fminsubnorm(0x00000001)
+    'fs1 == 1 and fe1 == 0x00 and fm1 == 0x000001 and  fcsr == 0  #nosat': 0 #  rs1_val==fminsubnorm(0x80000001)
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000002 and  fcsr == 0  #nosat': 0 #  rs1_val==fsubnorm(0x00000002)
+    'fs1 == 1 and fe1 == 0x00 and fm1 == 0x7ffffe and  fcsr == 0  #nosat': 0 #  rs1_val==fsubnorm(0x807FFFFE)
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7fffff and  fcsr == 0  #nosat': 0 #  rs1_val==fmaxsubnorm(0x007FFFFF)
+    'fs1 == 1 and fe1 == 0x00 and fm1 == 0x7fffff and  fcsr == 0  #nosat': 0 #  rs1_val==fmaxsubnorm(0x807FFFFF)
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==fminnorm(0x00800000)
+    'fs1 == 1 and fe1 == 0x01 and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==fminnorm(0x80800000)
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x000001 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x00800001)
+    'fs1 == 1 and fe1 == 0x01 and fm1 == 0x055555 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x80855555)
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fffff and  fcsr == 0  #nosat': 0 #  rs1_val==fmaxnorm(0x7F7FFFFF)
+    'fs1 == 1 and fe1 == 0xfe and fm1 == 0x7fffff and  fcsr == 0  #nosat': 0 #  rs1_val==fmaxnorm(0xFF7FFFFF)
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==finfinity(0x7F800000)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==finfinity(0xFF800000)
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x400000 and  fcsr == 0  #nosat': 0 #  rs1_val==fdefaultnan(0x7FC00000)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x400000 and  fcsr == 0  #nosat': 0 #  rs1_val==fdefaultnan(0xFFC00000)
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x400001 and  fcsr == 0  #nosat': 0 #  rs1_val==fqnan(0x7FC00001)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x455555 and  fcsr == 0  #nosat': 0 #  rs1_val==fqnan(0xFFC55555)
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x000001 and  fcsr == 0  #nosat': 0 #  rs1_val==fsnan(0x7F800001)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x2aaaaa and  fcsr == 0  #nosat': 0 #  rs1_val==fsnan(0xFFAAAAAA)
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==fone(0x3F800000)
+    'fs1 == 1 and fe1 == 0x7f and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==fone(0xBF800000)
+fmv.x.w_b22:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fmv.x.w: 0
+  rs1:
+    <<: *all_fregs
+  rd:
+    <<: *all_regs
+  val_comb:
+    'fs1 == 0 and fe1 == 0x7c and fm1 == 0x4923b8 and  fcsr == 0  #nosat': 0  #  rs1_val==fnorm(0x3e4923b8) | Exponent: -3, Exponent in the range [-3, integer width+3]
+    'fs1 == 0 and fe1 == 0x7d and fm1 == 0x36e5d6 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3eb6e5d6) | Exponent: -2, Exponent in the range [-3, integer width+3]
+    'fs1 == 0 and fe1 == 0x7e and fm1 == 0x49fee5 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3f49fee5) | Exponent: -1, Exponent in the range [-3, integer width+3]
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x1a616d and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3f9a616d) | Exponent: 0, Exponent in the range [-3, integer width+3]
+    'fs1 == 0 and fe1 == 0x80 and fm1 == 0x681ae9 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x40681ae9) | Exponent: 1, Exponent in the range [-3, integer width+3]
+    'fs1 == 0 and fe1 == 0x81 and fm1 == 0x696b5c and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x40e96b5c) | Exponent: 2, Exponent in the range [-3, integer width+3]
+    'fs1 == 0 and fe1 == 0x67 and fm1 == 0x53a4fc and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x33d3a4fc) | Exponent: -24, Exponent less than -3
+    'fs1 == 0 and fe1 == 0xc4 and fm1 == 0x046756 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x62046756) | Exponent: 69, Exponent greater than (integer width+3)
+fmv.x.w_b23:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fmv.x.w: 0
+  rs1:
+    <<: *all_fregs
+  rd:
+    <<: *all_regs
+  val_comb:
+    'fs1 == 0 and fe1 == 0x9d and fm1 == 0x7ffffc and  fcsr == 0  #nosat': 0  #  rs1_val==fnorm(0x4efffffc) | MaxInt + (-4)
+    'fs1 == 0 and fe1 == 0x9d and fm1 == 0x7ffffd and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x4efffffd) | MaxInt + (-3)
+    'fs1 == 0 and fe1 == 0x9d and fm1 == 0x7ffffe and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x4efffffe) | MaxInt + (-2)
+    'fs1 == 0 and fe1 == 0x9d and fm1 == 0x7fffff and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x4effffff) | MaxInt + (-1)
+    'fs1 == 0 and fe1 == 0x9e and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x4f000000) | MaxInt + (0)
+    'fs1 == 0 and fe1 == 0x9e and fm1 == 0x000001 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x4f000001) | MaxInt + (1)
+    'fs1 == 0 and fe1 == 0x9e and fm1 == 0x000002 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x4f000002) | MaxInt + (2)
+    'fs1 == 0 and fe1 == 0x9e and fm1 == 0x000003 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x4f000003) | MaxInt + (3)
+    'fs1 == 0 and fe1 == 0x9e and fm1 == 0x000004 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x4f000004) | MaxInt + (4)
+fmv.x.w_b24:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fmv.x.w: 0
+  rs1:
+    <<: *all_fregs
+  rd:
+    <<: *all_regs
+  val_comb:
+    'fs1 == 0 and fe1 == 0x78 and fm1 == 0x23d70a and  fcsr == 0  #nosat': 0  #  rs1_val==fnorm(0x3c23d70a) | +0+0.01
+    'fs1 == 1 and fe1 == 0x7b and fm1 == 0x6147ae and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbde147ae) | -0-0.11
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x0ccccc and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3f8ccccc) | +1+0.1
+    'fs1 == 1 and fe1 == 0x7f and fm1 == 0x0147ae and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbf8147ae) | -1-0.01
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x0007f0 and  fcsr == 0  #nosat': 0 #  rs1_val==fsubnorm(0x000007f0) | -0-0
+    'fs1 == 0 and fe1 == 0x7e and fm1 == 0x7d70a3 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3f7d70a3) | +1-0.01
+    'fs1 == 1 and fe1 == 0x7e and fm1 == 0x666666 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbf666666) | -1+0.1
+    'fs1 == 0 and fe1 == 0x7b and fm1 == 0x4ccccc and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3dcccccc) | +0+0.1
+    'fs1 == 0 and fe1 == 0x7e and fm1 == 0x666666 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3f666666) | +1-0.1
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x0147ae and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3f8147ae) | +1+0.01
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==fone(0x3f800000) | +1+0
+    'fs1 == 0 and fe1 == 0x7b and fm1 == 0x6147ae and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3de147ae) | -0+0.11
+    'fs1 == 1 and fe1 == 0x7e and fm1 == 0x63d70a and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbf63d70a) | -1+0.11
+    'fs1 == 1 and fe1 == 0x7e and fm1 == 0x7d70a3 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbf7d70a3) | -1+0.01
+    'fs1 == 1 and fe1 == 0x78 and fm1 == 0x23d70a and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbc23d70a) | +0-0.01
+    'fs1 == 0 and fe1 == 0x7e and fm1 == 0x63d70a and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3f63d70a) | +1-0.11
+    'fs1 == 1 and fe1 == 0x7f and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==fone(0xbf800000) | -1+0
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x0e147a and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3f8e147a) | +1+0.11
+    'fs1 == 1 and fe1 == 0x7b and fm1 == 0x4ccccc and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbdcccccc) | +0-0.1
+    'fs1 == 1 and fe1 == 0x7f and fm1 == 0x0e147a and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbf8e147a) | -1-0.11
+    'fs1 == 1 and fe1 == 0x7f and fm1 == 0x0ccccc and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbf8ccccc) | -1-0.1
+fmv.x.w_b27:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fmv.x.w: 0
+  rs1:
+    <<: *all_fregs
+  rd:
+    <<: *all_regs
+  val_comb:
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x000001 and  fcsr == 0  #nosat': 0  #  rs1_val==fsnan(0x7F800001)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x000001 and  fcsr == 0  #nosat': 0 #  rs1_val==fsnan(0xFF800001)
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x2aaaaa and  fcsr == 0  #nosat': 0 #  rs1_val==fsnan(0x7FAAAAAA)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x2aaaaa and  fcsr == 0  #nosat': 0 #  rs1_val==fsnan(0xFFAAAAAA)
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x400001 and  fcsr == 0  #nosat': 0 #  rs1_val==fqnan(0x7FC00001)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x400001 and  fcsr == 0  #nosat': 0 #  rs1_val==fqnan(0xFFC00001)
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x455555 and  fcsr == 0  #nosat': 0 #  rs1_val==fqnan(0x7FC55555)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x455555 and  fcsr == 0  #nosat': 0 #  rs1_val==fqnan(0xFFC55555)
+fmv.x.w_b28:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fmv.x.w: 0
+  rs1:
+    <<: *all_fregs
+  rd:
+    <<: *all_regs
+  val_comb:
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0  #nosat': 0  #  rs1_val==fzero(0x00000000) | +0
+    'fs1 == 0 and fe1 == 0x7e and fm1 == 0x124770 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3f124770) | A random number in the range (+0, +1)
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==fone(0x3F800000) | +1
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x200000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3fa00000) | Number = 1.25 => Number ∈ (1,2.75]
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x400000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3fc00000) | Number = 1.5 => Number ∈ (1,2.75]
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x600000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3fe00000) | Number = 1.75 => Number ∈ (1,2.75]
+    'fs1 == 0 and fe1 == 0x80 and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x40000000) | Number = 2.0 => Number ∈ (1,2.75]
+    'fs1 == 0 and fe1 == 0x80 and fm1 == 0x100000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x40100000) | Number = 2.25 => Number ∈ (1,2.75]
+    'fs1 == 0 and fe1 == 0x80 and fm1 == 0x200000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x40200000) | Number = 2.5 => Number ∈ (1,2.75]
+    'fs1 == 0 and fe1 == 0x80 and fm1 == 0x300000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x40300000) | Number = 2.75 => Number ∈ (1,2.75]
+    'fs1 == 0 and fe1 == 0x9c and fm1 == 0x5b9758 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x4e5b9758) | A random number in the range (+1, +1.11..11*2^precision)
+    'fs1 == 0 and fe1 == 0x9d and fm1 == 0x7fffff and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x4effffff) | MaxInt
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==finfinity(0x7F800000) | +Infinity
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x000001 and  fcsr == 0  #nosat': 0 #  rs1_val==fsnan(0x7F800001) | Signaling NaN
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x400001 and  fcsr == 0  #nosat': 0 #  rs1_val==fqnan(0x7FC00001) | Quiet NaN
+    'fs1 == 1 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==fzero(0x80000000) | -0
+    'fs1 == 1 and fe1 == 0x7d and fm1 == 0x58046a and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbed8046a) | A random number in the range (-1, -0)
+    'fs1 == 1 and fe1 == 0x7f and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==fone(0xBF800000) | -1
+    'fs1 == 1 and fe1 == 0x80 and fm1 == 0x300000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xc0300000) | Number = -2.75 => Number ∈ [-2.75,-1)
+    'fs1 == 1 and fe1 == 0x80 and fm1 == 0x200000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xc0200000) | Number = -2.5 => Number ∈ [-2.75,-1)
+    'fs1 == 1 and fe1 == 0x80 and fm1 == 0x100000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xc0100000) | Number = -2.25 => Number ∈ [-2.75,-1)
+    'fs1 == 1 and fe1 == 0x80 and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xc0000000) | Number = -2.0 => Number ∈ [-2.75,-1)
+    'fs1 == 1 and fe1 == 0x7f and fm1 == 0x600000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbfe00000) | Number = -1.75 => Number ∈ [-2.75,-1)
+    'fs1 == 1 and fe1 == 0x7f and fm1 == 0x400000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbfc00000) | Number = -1.5 => Number ∈ [-2.75,-1)
+    'fs1 == 1 and fe1 == 0x7f and fm1 == 0x200000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbfa00000) | Number = -1.25 => Number ∈ [-2.75,-1)
+    'fs1 == 1 and fe1 == 0x9d and fm1 == 0x4b3d25 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xcecb3d25) | A random number in the range (-1.11..11*2^precision, -1)
+    'fs1 == 1 and fe1 == 0x9e and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xcf000000) | -MaxInt
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x000000 and  fcsr == 0  #nosat': 0 #  rs1_val==finfinity(0xFF800000) | -Infinity
+fmv.x.w_b29:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fmv.x.w: 0
+  rs1:
+    <<: *all_fregs
+  rd:
+    <<: *all_regs
+  val_comb:
+    'fs1 == 0 and fe1 == 0x7c and fm1 == 0x4923b8 and  fcsr == 0  #nosat': 0  #  rs1_val==fnorm(0x3e4923b8) | Exp = -3; Sign = 0; LSB = 0; Guard = 0; Sticky = 0
+    'fs1 == 0 and fe1 == 0x7c and fm1 == 0x4923b9 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3e4923b9) | Exp = -3; Sign = 0; LSB = 0; Guard = 0; Sticky = 1
+    'fs1 == 0 and fe1 == 0x7c and fm1 == 0x4923ba and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3e4923ba) | Exp = -3; Sign = 0; LSB = 0; Guard = 1; Sticky = 0
+    'fs1 == 0 and fe1 == 0x7c and fm1 == 0x4923bb and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3e4923bb) | Exp = -3; Sign = 0; LSB = 0; Guard = 1; Sticky = 1
+    'fs1 == 0 and fe1 == 0x7c and fm1 == 0x4923bc and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3e4923bc) | Exp = -3; Sign = 0; LSB = 1; Guard = 0; Sticky = 0
+    'fs1 == 0 and fe1 == 0x7c and fm1 == 0x4923bd and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3e4923bd) | Exp = -3; Sign = 0; LSB = 1; Guard = 0; Sticky = 1
+    'fs1 == 0 and fe1 == 0x7c and fm1 == 0x4923be and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3e4923be) | Exp = -3; Sign = 0; LSB = 1; Guard = 1; Sticky = 0
+    'fs1 == 0 and fe1 == 0x7c and fm1 == 0x4923bf and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0x3e4923bf) | Exp = -3; Sign = 0; LSB = 1; Guard = 1; Sticky = 1
+    'fs1 == 1 and fe1 == 0x7c and fm1 == 0x4923b8 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbe4923b8) | Exp = -3; Sign = 1; LSB = 0; Guard = 0; Sticky = 0
+    'fs1 == 1 and fe1 == 0x7c and fm1 == 0x4923b9 and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbe4923b9) | Exp = -3; Sign = 1; LSB = 0; Guard = 0; Sticky = 1
+    'fs1 == 1 and fe1 == 0x7c and fm1 == 0x4923ba and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbe4923ba) | Exp = -3; Sign = 1; LSB = 0; Guard = 1; Sticky = 0
+    'fs1 == 1 and fe1 == 0x7c and fm1 == 0x4923bb and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbe4923bb) | Exp = -3; Sign = 1; LSB = 0; Guard = 1; Sticky = 1
+    'fs1 == 1 and fe1 == 0x7c and fm1 == 0x4923bc and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbe4923bc) | Exp = -3; Sign = 1; LSB = 1; Guard = 0; Sticky = 0
+    'fs1 == 1 and fe1 == 0x7c and fm1 == 0x4923bd and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbe4923bd) | Exp = -3; Sign = 1; LSB = 1; Guard = 0; Sticky = 1
+    'fs1 == 1 and fe1 == 0x7c and fm1 == 0x4923be and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbe4923be) | Exp = -3; Sign = 1; LSB = 1; Guard = 1; Sticky = 0
+    'fs1 == 1 and fe1 == 0x7c and fm1 == 0x4923bf and  fcsr == 0  #nosat': 0 #  rs1_val==fnorm(0xbe4923bf) | Exp = -3; Sign = 1; LSB = 1; Guard = 1; Sticky = 1

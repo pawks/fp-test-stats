@@ -1,0 +1,100 @@
+fclass_b1:
+  config:
+  - check ISA:=regex(.*I.*F.*)
+  mnemonics:
+    fclass.s: 0
+  rs1:
+    <<:
+      f0: 0
+      f1: 0
+      f2: 0
+      f3: 0
+      f4: 0
+      f5: 0
+      f6: 0
+      f7: 0
+      f8: 0
+      f9: 0
+      f10: 0
+      f11: 0
+      f12: 0
+      f13: 0
+      f14: 0
+      f15: 0
+      f16: 0
+      f17: 0
+      f18: 0
+      f19: 0
+      f20: 0
+      f21: 0
+      f22: 0
+      f23: 0
+      f24: 0
+      f25: 0
+      f26: 0
+      f27: 0
+      f28: 0
+      f29: 0
+      f30: 0
+      f31: 0
+
+  rd:
+    <<:
+      x0: 0
+      x1: 0
+      x2: 0
+      x3: 0
+      x4: 0
+      x5: 0
+      x6: 0
+      x7: 0
+      x8: 0
+      x9: 0
+      x10: 0
+      x11: 0
+      x12: 0
+      x13: 0
+      x14: 0
+      x15: 0
+      x16: 0
+      x17: 0
+      x18: 0
+      x19: 0
+      x20: 0
+      x21: 0
+      x22: 0
+      x23: 0
+      x24: 0
+      x25: 0
+      x26: 0
+      x27: 0
+      x28: 0
+      x29: 0
+      x30: 0
+      x31: 0
+
+  val_comb:
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0  #  rs1_val==fzero(0x00000000)
+    'fs1 == 1 and fe1 == 0x00 and fm1 == 0x000000 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fzero(0x80000000)
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000001 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fminsubnorm(0x00000001)
+    'fs1 == 1 and fe1 == 0x00 and fm1 == 0x000001 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fminsubnorm(0x80000001)
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x000002 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x00000002)
+    'fs1 == 1 and fe1 == 0x00 and fm1 == 0x7ffffe and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsubnorm(0x807FFFFE)
+    'fs1 == 0 and fe1 == 0x00 and fm1 == 0x7fffff and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fmaxsubnorm(0x007FFFFF)
+    'fs1 == 1 and fe1 == 0x00 and fm1 == 0x7fffff and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fmaxsubnorm(0x807FFFFF)
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x000000 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fminnorm(0x00800000)
+    'fs1 == 1 and fe1 == 0x01 and fm1 == 0x000000 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fminnorm(0x80800000)
+    'fs1 == 0 and fe1 == 0x01 and fm1 == 0x000001 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x00800001)
+    'fs1 == 1 and fe1 == 0x01 and fm1 == 0x055555 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fnorm(0x80855555)
+    'fs1 == 0 and fe1 == 0xfe and fm1 == 0x7fffff and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fmaxnorm(0x7F7FFFFF)
+    'fs1 == 1 and fe1 == 0xfe and fm1 == 0x7fffff and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fmaxnorm(0xFF7FFFFF)
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x000000 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==finfinity(0x7F800000)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x000000 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==finfinity(0xFF800000)
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x400000 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fdefaultnan(0x7FC00000)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x400000 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fdefaultnan(0xFFC00000)
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x400001 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fqnan(0x7FC00001)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x455555 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fqnan(0xFFC55555)
+    'fs1 == 0 and fe1 == 0xff and fm1 == 0x000001 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsnan(0x7F800001)
+    'fs1 == 1 and fe1 == 0xff and fm1 == 0x2aaaaa and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fsnan(0xFFAAAAAA)
+    'fs1 == 0 and fe1 == 0x7f and fm1 == 0x000000 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fone(0x3F800000)
+    'fs1 == 1 and fe1 == 0x7f and fm1 == 0x000000 and  fcsr == 0 and rs1_nan_prefix == 0xffffffff  #nosat': 0 #  rs1_val==fone(0xBF800000)
