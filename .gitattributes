@@ -1,0 +1,2 @@
+coverage.html filter=lfs diff=lfs merge=lfs -text
+suite_coverage.rpt filter=lfs diff=lfs merge=lfs -text
